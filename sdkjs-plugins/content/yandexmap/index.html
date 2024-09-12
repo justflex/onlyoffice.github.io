@@ -1,15 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html style="height:100%;">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>yandexmap</title>
 <script src="https://api-maps.yandex.ru/2.1/?apikey=5f8c26c7-09c7-4335-a183-267fc0da57e8&lang=ru_RU" type="text/javascript"/>
 <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+
+<script type="text/javascript" src="scripts/yandexmap.js"></script>
+
 </head>
-<body>
-    <div id="map" style="width: 600px; height: 400px"></div>
-    <script type="text/javascript" src="scripts/yandexmap.js"></script>
+<body style="user-select:none;width:100%;height:100%;margin:0;padding:0;overflow:hidden;box-sizing:border-box;">
+
+<div id="address_id" style="position:absolute;left:15px;top:15px;right:15px;height:20px;margin:0;padding:0;font-style: italic;font-size: larger" class="defaultlable">Enter your address</div>
+
+<div style="position:absolute;left:15px;top:35px;right:15px;height:40px;margin:0;padding:0;">
+    <div style="position:absolute;left:0px;top:0px;right:40px;height:100%;margin:0;padding:0;">
+        <input type="text" class="form-control" style="left:0px;top:0px;width:100%;" id="userSearch" autofocus="autofocus" autocomplete="off">
+       </div>
+    <button class="btn-text-default" style="position:absolute;top:0px;right:0px;width:30px;" id="button_id">OK</button>
+</div>
+
 </body>
 </html>
