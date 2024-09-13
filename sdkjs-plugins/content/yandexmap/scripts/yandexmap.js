@@ -1,26 +1,34 @@
 (function (window,undefined)
 {
-  let userAddress = document.getElementById("userSearch").value
+  let userAddress = ""
   let windowStatus = false
 
   function startMap ()
   {
-    newMap = new ymap("map",{center:[55.74, 37.58],zoom:10},{searchControlProvider: "yandex#search"})
+   let newMap = new ymaps.Map("map",{center:[55.74, 37.58],zoom:10},{searchControlProvider: "yandex#search"})
     newMap.controls.add(searchControl)
     searchControl.search(userAddress)
   }
 
+  const getUserAddress = (add_id) => {
+    document.getElementById("button_id").onclick
+    {
+      add_id = document.getElementById("userSearch").value
+    }
+  }
+
   window.Asc.plugin.init = function () {
-    ymap.ready(startMap)
+    getUserAddress(userAddress)
+    ymaps.ready(startMap)
 
     if (e.keyCode == 13) {
       document.getElementById("button_id").onclick
     }
-
-    if (this.info.isViewMode) {
-      document.getElementById("userSearch").disable = true
-      document.getElementById("button_id").disable = true
-    }
+    //
+    // if (this.info.isViewMode) {
+    //   document.getElementById("userSearch").disable = true
+    //   document.getElementById("button_id").disable = true
+    // }
 
     if (!windowStatus) {
       let player = document.getElementById("id_player")
@@ -29,5 +37,10 @@
       window.Asc.plugin.resizeWindow(620, 480, 390, 400, 0, 0)
     }
   }
+  window.Asc.plugin.button = function(id)
+  {
+    this.executeCommand("close", "");
+  }
+
 })(window,undefined)
 
