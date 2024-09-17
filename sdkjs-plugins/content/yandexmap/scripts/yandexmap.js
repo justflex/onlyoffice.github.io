@@ -3,7 +3,7 @@
   try {
 
     let mapPlayer = null
-    let _mapPlayer = null
+    let mapZoom = null
     let windowStatus = false
     let mapCoords = null
     let mapSettings = {
@@ -35,39 +35,23 @@
             })
             mapPlayer.controls.add(searchControl)
             searchControl.search(userAddress)
-            let mapGeocoder = ymaps.geocode(userAddress)
-            mapGeocoder.then(
-              function (res) {
-                console.log(res.geoObjects.get(0).geometry.getCoordinates())
-              }
-            )
             document.getElementById("text_id").disabled = true
             document.getElementById("button_id").disabled = true
             document.getElementById("button_id").style.visibility = "hidden"
-          }
-          ymaps.ready(startMap)
-        }
-      }
-    }
+            mapPlayer.events.add("click", function (e) {
+                mapCoords = e.get("coords")
+                mapZoom = mapPlayer.getZoom()
+            })
 
-      window.Asc.plugin.button = function (id) {
+            window.Asc.plugin.button = function (id) {
 
-        if (id === 0 && mapPlayer) {
+              if (id === 0 && mapPlayer) {
 
-          const _data = document.getElementById("text_id").value
-
-          if (!_mapPlayer) {
-            ymaps.ready(startMap)
-            function startMap() {
-              _mapPlayer = new ymaps.Map("map",mapSettings)
-              let mapGeocoder = ymaps.geocode(_data)
-              mapGeocoder.then(
-                function (res) {
-                  mapCoords = res.geoObjects.get(0).geometry.getCoordinates()
+                if (true) {
 
                   const ApiKey = "2fc0fb41-8290-4ed4-a5f4-4b0ea93a9710"
 
-                  const _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] +","+mapCoords[0] +"&z=12&apikey="+ ApiKey
+                  const _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] +","+mapCoords[0] +"&z=" +mapZoom+ "&apikey="+ ApiKey
 
                   if(ApiKey) {
                     let _info = window.Asc.plugin.info
@@ -81,7 +65,7 @@
                       width : _info.width ? _info.width : 100,
                       height : _info.height ? _info.height : 70,
                       imgSrc : _url,
-                      data : _data,
+                      data : userAddress,
                       objectId : _info.objectId,
                       resize : _info.resize
                     }
@@ -90,13 +74,19 @@
                     })
                   }
                   else { this.executeCommand("close", "")}
+            }
                 }
-              )
+              else { this.executeCommand("close", "")}
             }
           }
+          ymaps.ready(startMap)
         }
-        else { this.executeCommand("close", "")}
       }
+    }
+    window.Asc.plugin.button = function (id){
+      this.executeCommand("close","")
+    }
+
   }
   catch (err)
   {
