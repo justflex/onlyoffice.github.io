@@ -1,7 +1,5 @@
 (function (window,undefined)
 {
-  try {
-
     let mapPlayer = null
     let mapZoom = null
     let windowStatus = false
@@ -36,9 +34,8 @@
             mapPlayer.controls.add(searchControl)
             searchControl.search(userAddress)
             document.getElementById("text_id").disabled = true
-            document.getElementById("button_id").disabled = true
-            document.getElementById("button_id").style.visibility = "hidden"
-            mapPlayer.events.add("click", function (e) {
+
+            mapPlayer.events.add("mouseleave", function (e) {
                 mapCoords = e.get("coords")
                 mapZoom = mapPlayer.getZoom()
             })
@@ -79,19 +76,13 @@
               else { this.executeCommand("close", "")}
             }
           }
-          ymaps.ready(startMap)
+            ymaps.ready(startMap)
         }
       }
     }
     window.Asc.plugin.button = function (id){
       this.executeCommand("close","")
     }
-
-  }
-  catch (err)
-  {
-    console.log("NOT WORKING")
-  }
-
 })(window,undefined)
+
 
