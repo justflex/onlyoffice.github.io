@@ -48,6 +48,9 @@
                   mapCoords = mapPlayer.getCenter()
                   mapZoom = mapPlayer.getZoom()
 
+                  localStorage.setItem("key1",mapCoords)
+                  localStorage.setItem("key2",mapZoom)
+
                   const _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] +","+mapCoords[0] +"&z=" +mapZoom+ "&apikey="+ ApiKey
 
                   if(ApiKey) {
@@ -83,7 +86,6 @@
       let check = text
       if(check !== "")
       {
-
         document.getElementById("text_id").value = check
 
         if (!windowStatus) {
@@ -93,20 +95,14 @@
           window.Asc.plugin.resizeWindow(650, 550, 450, 450, 0, 0)
         }
 
-        const userAddress = document.getElementById("text_id").value
+        mapSettings.center[0] = Number(localStorage.getItem("key1").split(",")[0])
+        mapSettings.center[1] = Number(localStorage.getItem("key1").split(",")[1])
+        mapSettings.zoom = Number(localStorage.getItem("key2"))
 
         if (!mapPlayer) {
           function startMap() {
             mapPlayer = new ymaps.Map("map",mapSettings)
-            let searchControl = new ymaps.control.SearchControl({
-              options: {
-                provider: "yandex#search"
-              }
-            })
-            mapPlayer.controls.add(searchControl)
-            searchControl.search(userAddress)
             document.getElementById("text_id").disabled = true
-
 
             window.Asc.plugin.button = function (id) {
 
@@ -118,6 +114,9 @@
 
                   mapCoords = mapPlayer.getCenter()
                   mapZoom = mapPlayer.getZoom()
+
+                  localStorage.setItem("key1",mapCoords)
+                  localStorage.setItem("key2",mapZoom)
 
                   const _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] +","+mapCoords[0] +"&z=" +mapZoom+ "&apikey="+ ApiKey
 
@@ -133,7 +132,7 @@
                       width : _info.width ? _info.width : 100,
                       height : _info.height ? _info.height : 70,
                       imgSrc : _url,
-                      data : userAddress,
+                      data : check,
                       objectId : _info.objectId,
                       resize : _info.resize
                     }
