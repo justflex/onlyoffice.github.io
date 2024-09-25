@@ -24,6 +24,8 @@
 
         const userAddress = document.getElementById("text_id").value
 
+        localStorage.setItem("text_key",userAddress)
+
         if (!mapPlayer) {
           function startMap() {
             mapPlayer = new ymaps.Map("map",mapSettings)
@@ -86,7 +88,7 @@
       let check = text
       if(check !== "")
       {
-        document.getElementById("text_id").value = check
+        document.getElementById("text_id").value = localStorage.getItem("text_key")
 
         if (!windowStatus) {
           let newWindow = document.getElementById("id_player")
@@ -102,7 +104,21 @@
         if (!mapPlayer) {
           function startMap() {
             mapPlayer = new ymaps.Map("map",mapSettings)
-            document.getElementById("text_id").disabled = true
+            document.getElementById("text_id").disabled = false
+
+            mapPlayer.events.add("click",function (e)
+            {
+              const userAddress = document.getElementById("text_id").value
+              localStorage.setItem("text_key", userAddress)
+              let searchControl = new ymaps.control.SearchControl({
+                options: {
+                  provider: "yandex#search"
+                }
+              })
+              mapPlayer.controls.add(searchControl)
+              searchControl.search(userAddress)
+              document.getElementById("text_id").disabled = true
+            })
 
             window.Asc.plugin.button = function (id) {
 
@@ -153,6 +169,16 @@
     window.Asc.plugin.button = function (id){
       this.executeCommand("close","")
     }
+
+    window.Asc.plugin.onTranslate = function ()
+    {
+      let lab = document.querySelector("label")
+      if(lab)
+      {
+        lab.innerHTML = window.Asc.plugin.tr("Enter your address")
+      }
+    }
+
 })(window,undefined)
 
 
