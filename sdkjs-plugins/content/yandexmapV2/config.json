@@ -1,0 +1,47 @@
+{
+  "name": "YandexMaps",
+  "nameLocale": {
+    "ru": "ЯндексКарты",
+    "fr": "YandexMaps",
+    "es": "YandexMaps",
+    "pt-BR": "YandexMaps",
+    "de": "YandexMaps",
+    "si": "YandexMaps"
+  },
+  "guid": "asc.{74C5C257-AA9A-4548-9142-C53BE1294BF4}",
+  "version": "1.0.0",
+
+  "variations": [
+    {
+      "description": "Easily integrate the map into your document.",
+      "descriptionLocale": {
+        "ru": "Легко интегрируете карту в ваш документ.",
+        "fr": "Intégrez facilement la carte dans votre document.",
+        "es": "Integre fácilmente el mapa en su documento.",
+        "pt-BR": "Integre facilmente o mapa ao seu documento.",
+        "de": "Integrieren Sie die Karte ganz einfach in Ihr Dokument.",
+        "si": "ඔබගේ ලේඛනයට සිතියම පහසුවෙන් ඒකාබද්ධ කරන්න."
+      },
+
+      "url": "index.html",
+
+      "isViewer": false,
+      "isDisplayedInViewer": false,
+      "EditorsSupport": [ "word", "cell", "slide" ],
+      "isVisual": false,
+      "isModal": false,
+      "isInsideMode": false,
+      "initDataType": "ole",
+      "isUpdateOleOnResize": false,
+
+      "store": {
+        "background": {
+          "light" : "#ED3323",
+          "dark" : "#ED3323"
+        },
+
+        "categories": ["specAbilities", "entertainment", "recommended"]
+      }
+    }
+  ]
+}
