@@ -13,9 +13,6 @@
     let mapCoords = localStorage.getItem("key1").split(",")
     let mapZoom = localStorage.getItem("key2")
 
-    console.log(mapCoords)
-    console.log(mapZoom)
-
     const _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] + "," + mapCoords[0] + "&z=" + mapZoom + "&apikey=" + ApiKey
 
     if (ApiKey) {

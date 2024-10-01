@@ -19,7 +19,6 @@
       let newWindow = document.getElementById("id_player")
       newWindow.innerHTML = "<div id=\"map\" style=\"position:absolute;padding:0;margin:0;left:0;top:0;width:100%;height:100%\"></div>"
       windowStatus = true
-      window.Asc.plugin.resizeWindow(650, 550, 450, 450, 0, 0)
     }
 
     mapSettings.center[0] = Number(localStorage.getItem("key1").split(",")[0])
