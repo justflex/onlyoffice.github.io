@@ -30,20 +30,21 @@
         mapPlayer = new ymaps.Map("map",mapSettings)
         document.getElementById("text_id").disabled = false
 
-        mapPlayer.events.add("click",function (e)
-        {
-          const userAddress = document.getElementById("text_id").value
-          localStorage.setItem("text_key", userAddress)
-          let searchControl = new ymaps.control.SearchControl({
-            options: {
-              provider: "yandex#search"
-            }
-          })
-          mapPlayer.controls.add(searchControl)
-          searchControl.search(userAddress)
-          document.getElementById("text_id").disabled = true
-
+        document.querySelector('input').addEventListener('keydown' ,function (e){
+          if(e.key === 'Enter') {
+            const userAddress = document.getElementById("text_id").value
+            localStorage.setItem("text_key", userAddress)
+            let searchControl = new ymaps.control.SearchControl({
+              options: {
+                provider: "yandex#search"
+              }
+            })
+            mapPlayer.controls.add(searchControl)
+            searchControl.search(userAddress)
+            document.getElementById("text_id").disabled = true
+          }
         })
+
         mapPlayer.events.add("mousemove", function (e) {
           mapCoords = mapPlayer.getCenter()
           mapZoom = mapPlayer.getZoom()

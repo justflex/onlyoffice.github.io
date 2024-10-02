@@ -19,6 +19,14 @@
     }
   }
 
+  document.querySelector('input').addEventListener('keydown',function (e){
+    if(e.key === 'Enter')
+    {
+      window.Asc.plugin.sendToPlugin("onWindowReady")
+    }
+  })
+
+
   window.Asc.plugin.onTranslate = function ()
   {
     let lab = document.querySelector("label")

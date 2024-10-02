@@ -163,6 +163,13 @@
         mapWindow = new window.Asc.PluginWindow();
         mapWindow.show(variation);
 
+        mapWindow.attachEvent('onWindowReady',function ()
+        {
+          mapWindow.close()
+          mapWindow = null
+          CreateWindow(displayMap)
+        })
+
 
         window.Asc.plugin.button = function (id, windowId) {
           if(id === 0 ) {
