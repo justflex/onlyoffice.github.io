@@ -1,26 +1,28 @@
+'use strict';
+
 (function (window,undefined)
 {
-    let mapWindow = null
-    let displayMap = 'displayMap'
-    let displayInput = 'displayInput'
-    let currentObjectId = undefined
+    let mapWindow = null;
+    let displayMap = 'displayMap';
+    let displayInput = 'displayInput';
+    let currentObjectId = undefined;
 
 
   function addOleObj() {
 
-    const ApiKey = "2fc0fb41-8290-4ed4-a5f4-4b0ea93a9710"
+    const ApiKey = "2fc0fb41-8290-4ed4-a5f4-4b0ea93a9710";
 
-    let mapCoords = localStorage.getItem("key1").split(",")
-    let mapZoom = localStorage.getItem("key2")
+    let mapCoords = localStorage.getItem("key1").split(",");
+    let mapZoom = localStorage.getItem("key2");
 
-    const _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] + "," + mapCoords[0] + "&z=" + mapZoom + "&apikey=" + ApiKey
+    const _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] + "," + mapCoords[0] + "&z=" + mapZoom + "&apikey=" + ApiKey;
 
     if (ApiKey) {
-      let _info = window.Asc.plugin.info
+      let _info = window.Asc.plugin.info;
 
-      currentObjectId = _info.objectId
+      currentObjectId = _info.objectId;
 
-      let _method = (_info.objectId === undefined) ? "AddOleObject" : "EditOleObject"
+      let _method = (_info.objectId === undefined) ? "AddOleObject" : "EditOleObject";
 
       let _param = {
         guid: _info.guid,
@@ -33,9 +35,9 @@
         objectId: currentObjectId,
         resize: true,
         recalculate: true
-      }
+      };
 
-      window.Asc.plugin.executeMethod(_method, [_param])
+      window.Asc.plugin.executeMethod(_method, [_param]);
     }
   }
 
@@ -100,10 +102,10 @@
 
         window.Asc.plugin.button = function (id, windowId) {
           if(id === 0 ) {
-            mapWindow.close()
-            mapWindow = null
-            addOleObj()
-            currentObjectId = undefined
+            mapWindow.close();
+            mapWindow = null;
+            addOleObj();
+            currentObjectId = undefined;
           }
           else if (windowId) {
             window.Asc.plugin.executeMethod('CloseWindow', [windowId], function () {
@@ -111,7 +113,7 @@
             })
           }
         }
-        break
+        break;
       }
       case 'displayInput':
       {
@@ -165,17 +167,17 @@
 
         mapWindow.attachEvent('onWindowReady',function ()
         {
-          mapWindow.close()
-          mapWindow = null
-          CreateWindow(displayMap)
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayMap);
         })
 
 
         window.Asc.plugin.button = function (id, windowId) {
           if(id === 0 ) {
-            mapWindow.close()
-            mapWindow = null
-            CreateWindow(displayMap)
+            mapWindow.close();
+            mapWindow = null;
+            CreateWindow(displayMap);
           }
           else if (windowId) {
             window.Asc.plugin.executeMethod('CloseWindow', [windowId], function () {
@@ -183,7 +185,7 @@
             })
           }
         }
-        break
+        break;
       }
     }
   }
@@ -191,13 +193,13 @@
 
     window.Asc.plugin.init = function (text) {
 
-      let check = text
+      let check = text;
       if (check !== "") {
-          CreateWindow(displayMap)
+          CreateWindow(displayMap);
       }
       else
       {
-        CreateWindow(displayInput)
+        CreateWindow(displayInput);
       }
     }
 
