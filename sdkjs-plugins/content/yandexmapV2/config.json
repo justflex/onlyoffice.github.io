@@ -25,6 +25,9 @@
 
       "url": "index.html",
 
+
+      "icons": ["store/resources/img/defaults/card/icon.png"],
+
       "isViewer": false,
       "isDisplayedInViewer": false,
       "EditorsSupport": [ "word", "cell", "slide" ],
