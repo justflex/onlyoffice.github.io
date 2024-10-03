@@ -12,8 +12,8 @@
 
     const ApiKey = "2fc0fb41-8290-4ed4-a5f4-4b0ea93a9710";
 
-    let mapCoords = localStorage.getItem("key1").split(",");
-    let mapZoom = localStorage.getItem("key2");
+    let mapCoords = localStorage.getItem("coords_plugin_yandex_map_item").split(",");
+    let mapZoom = localStorage.getItem("zoom_plugin_yandex_map_item");
 
     const _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] + "," + mapCoords[0] + "&z=" + mapZoom + "&apikey=" + ApiKey;
 

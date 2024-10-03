@@ -15,7 +15,7 @@
 
   window.Asc.plugin.init = function() {
 
-    document.getElementById("text_id").value = localStorage.getItem("text_key");
+    document.getElementById("text_id").value = localStorage.getItem("text_plugin_yandex_map_item");
 
     if (!windowStatus) {
       let newWindow = document.getElementById("id_player");
@@ -23,11 +23,11 @@
       windowStatus = true;
     }
 
-    if(localStorage.getItem('01_plugin_yandex_map_item') !== null && localStorage.getItem('02_plugin_yandex_map_item') !== null )
+    if(localStorage.getItem('coords_plugin_yandex_map_item') !== null && localStorage.getItem('zoom_plugin_yandex_map_item') !== null )
     {
-      mapSettings.center[0] = Number(localStorage.getItem("coo_plugin_yandex_map_item").split(",")[0])
-      mapSettings.center[1] = Number(localStorage.getItem("01_plugin_yandex_map_item").split(",")[1])
-      mapSettings.zoom = Number(localStorage.getItem("02_plugin_yandex_map_item"))
+      mapSettings.center[0] = Number(localStorage.getItem("coords_plugin_yandex_map_item").split(",")[0])
+      mapSettings.center[1] = Number(localStorage.getItem("coords_plugin_yandex_map_item").split(",")[1])
+      mapSettings.zoom = Number(localStorage.getItem("zoom_plugin_yandex_map_item"))
     }
 
     if (!mapPlayer) {
