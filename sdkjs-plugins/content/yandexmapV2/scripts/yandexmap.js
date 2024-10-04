@@ -31,7 +31,7 @@
         width: _info.width ? _info.width : 100,
         height: _info.height ? _info.height : 70,
         imgSrc: _url,
-        data: localStorage.getItem("text_key"),
+        data: localStorage.getItem("text_plugin_yandex_map_item"),
         objectId: currentObjectId,
         resize: true,
         recalculate: true
