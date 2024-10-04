@@ -28,6 +28,7 @@
     }
   })
 
+  localStorage.setItem('autoEnter_yandex_map_item','0')
 
   window.Asc.plugin.onTranslate = function ()
   {

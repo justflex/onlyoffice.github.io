@@ -44,8 +44,8 @@
 
       "store": {
         "background": {
-          "light" : "#ED3323",
-          "dark" : "#ED3323"
+          "light": "#F5F5F5",
+          "dark": "#444444"
         },
 
         "categories": ["specAbilities", "entertainment", "recommended"]

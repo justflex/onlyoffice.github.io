@@ -12,7 +12,6 @@
     controls: ["zoomControl","typeSelector"]
   };
 
-
   window.Asc.plugin.init = function() {
 
     document.getElementById("text_id").value = localStorage.getItem("text_plugin_yandex_map_item");
@@ -38,7 +37,7 @@
         document.querySelector('input').addEventListener('keydown' ,function (e){
           if(e.key === 'Enter') {
             const userAddress = document.getElementById("text_id").value;
-            localStorage.setItem("text_key", userAddress);
+            localStorage.setItem("text_plugin_yandex_map_item", userAddress);
             let searchControl = new ymaps.control.SearchControl({
               options: {
                 provider: "yandex#search"
@@ -48,7 +47,14 @@
             searchControl.search(userAddress);
             document.getElementById("text_id").disabled = true;
           }
-        })
+        });
+
+        if(localStorage.getItem('autoEnter_yandex_map_item') !== null) {
+          if (!Number(localStorage.getItem('autoEnter_yandex_map_item'))) {
+            document.querySelector('input').dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter'}));
+            localStorage.autoEnter_yandex_map_item = 1;
+          }
+        }
 
         mapPlayer.events.add("mousemove", function (e) {
           mapCoords = mapPlayer.getCenter();
