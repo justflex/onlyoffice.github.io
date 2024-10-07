@@ -6,6 +6,16 @@
     let displayMap = 'displayMap';
     let displayInput = 'displayInput';
     let currentObjectId = undefined;
+    let _url = '';
+
+  window.Asc.plugin.onThemeChanged = function (theme) {
+
+    if(theme.type === "dark") {
+      localStorage.setItem('theme_yandex_map_plugin', '1');
+    } else {
+      localStorage.setItem('theme_yandex_map_plugin', '0');
+    }
+  };
 
 
   function addOleObj() {
@@ -15,7 +25,14 @@
     let mapCoords = localStorage.getItem("coords_plugin_yandex_map_item").split(",");
     let mapZoom = localStorage.getItem("zoom_plugin_yandex_map_item");
 
-    const _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] + "," + mapCoords[0] + "&z=" + mapZoom + "&apikey=" + ApiKey;
+    if(Number(localStorage.getItem('theme_yandex_map_plugin')))
+    {
+      _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] + "," + mapCoords[0] + "&z=" + mapZoom +'&theme=dark' +"&apikey=" + ApiKey;
+    }
+    else
+    {
+      _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] + "," + mapCoords[0] + "&z=" + mapZoom +"&apikey=" + ApiKey;
+    }
 
     if (ApiKey) {
       let _info = window.Asc.plugin.info;
@@ -202,6 +219,16 @@
         CreateWindow(displayInput);
       }
     }
+
+  window.Asc.plugin.onTranslate = function ()
+  {
+    let lab = document.querySelector("label");
+    if(lab)
+    {
+      lab.innerHTML = window.Asc.plugin.tr("Enter your address");
+    }
+  }
+
 
 })(window,undefined)
 

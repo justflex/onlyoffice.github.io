@@ -12,6 +12,15 @@
     controls: ["zoomControl","typeSelector"]
   };
 
+  function setMapLayer(map, map_type){
+    const MAP = 'custom#' + map_type;
+    ymaps.layer.storage.add(MAP, function mapLayer() {
+      return new ymaps.Layer('https://core-renderer-tiles.maps.yandex.net/tiles?l=map' + ((map_type == 'dark') ? ('&theme=dark') : ('')) + '&%c&%l');
+    });
+    ymaps.mapType.storage.add(MAP, new ymaps.MapType(map_type, [MAP]));
+    map.setType(MAP);
+  }
+
   window.Asc.plugin.init = function() {
 
     document.getElementById("text_id").value = localStorage.getItem("text_plugin_yandex_map_item");
@@ -33,6 +42,10 @@
       function startMap() {
         mapPlayer = new ymaps.Map("map",mapSettings);
         document.getElementById("text_id").disabled = false;
+
+        if(Number(localStorage.getItem('theme_yandex_map_plugin'))) {
+          setMapLayer(mapPlayer, 'dark');
+        }
 
         document.querySelector('input').addEventListener('keydown' ,function (e){
           if(e.key === 'Enter') {
