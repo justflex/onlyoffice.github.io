@@ -85,11 +85,15 @@
   window.Asc.plugin.onTranslate = function ()
   {
     let lab = document.querySelector("label");
+    let inp = document.querySelector("input");
     if(lab)
     {
-      lab.innerHTML = window.Asc.plugin.tr("Enter your address");
+      lab.innerHTML = window.Asc.plugin.tr("Your address");
+    }
+    if(inp)
+    {
+      inp.placeholder = window.Asc.plugin.tr("Enter your address and press Enter");
     }
   }
-
 
 })(window,undefined);

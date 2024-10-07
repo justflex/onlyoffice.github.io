@@ -17,7 +17,6 @@
     }
   };
 
-
   function addOleObj() {
 
     const ApiKey = "2fc0fb41-8290-4ed4-a5f4-4b0ea93a9710";
@@ -91,21 +90,27 @@
 
           buttons: [
             {
-              text: 'OK',
+              text: 'Insert',
               primary: true,
-              isViewer: false
-
+              isViewer: false,
+              textLocale: {
+                "ru": "Вставить",
+                "fr": "Insérer",
+                "es": "Insertar",
+                "de": "Einfügen",
+                "si": "ඇතුල් කරන්න"
+              }
             },
             {
-              text: 'Cancel',
+              text: 'Close',
               primary: false,
               isViewer: true,
               textLocale: {
-                "ru": "Отмена",
-                "fr": "Annuler",
-                "es": "Cancelar",
-                "de": "Abbrechen",
-                "si": "අවලංගු"
+                "ru": "Закрыть",
+                "fr": "Fermer",
+                "es": "Cerca",
+                "de": "Schließen",
+                "si": "වසන්න"
               }
             }
           ],
@@ -155,27 +160,7 @@
           initDataType: "ole",
           isUpdateOleOnResize: false,
 
-          buttons: [
-            {
-              text: 'OK',
-              primary: true,
-              isViewer: false
-
-            },
-            {
-              text: 'Cancel',
-              primary: false,
-              isViewer: true,
-              textLocale: {
-                "ru": "Отмена",
-                "fr": "Annuler",
-                "es": "Cancelar",
-                "de": "Abbrechen",
-                "si": "අවලංගු"
-              }
-            }
-          ],
-          size: [350, 90]
+          size: [650, 90]
         };
 
 
@@ -191,12 +176,7 @@
 
 
         window.Asc.plugin.button = function (id, windowId) {
-          if(id === 0 ) {
-            mapWindow.close();
-            mapWindow = null;
-            CreateWindow(displayMap);
-          }
-          else if (windowId) {
+        if (windowId) {
             window.Asc.plugin.executeMethod('CloseWindow', [windowId], function () {
               window.Asc.plugin.executeCommand("close", "");
             })
