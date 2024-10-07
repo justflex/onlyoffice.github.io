@@ -220,16 +220,6 @@
       }
     }
 
-  window.Asc.plugin.onTranslate = function ()
-  {
-    let lab = document.querySelector("label");
-    if(lab)
-    {
-      lab.innerHTML = window.Asc.plugin.tr("Enter your address");
-    }
-  }
-
-
 })(window,undefined)
 
 
