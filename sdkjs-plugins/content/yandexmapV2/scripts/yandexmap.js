@@ -174,6 +174,12 @@
           CreateWindow(displayMap);
         })
 
+        mapWindow.attachEvent('onWindowInputError',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayInput);
+        })
 
         window.Asc.plugin.button = function (id, windowId) {
         if (windowId) {

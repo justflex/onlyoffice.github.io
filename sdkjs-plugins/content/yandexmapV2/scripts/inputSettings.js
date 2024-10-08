@@ -2,20 +2,32 @@
 
 (function(window,undefined) {
 
-  window.Asc.plugin.init = function () {
+  let userAddress = ''
 
-    document.getElementById("text_id").onchange = function () {
+  window.Asc.plugin.init = function () {}
 
-      const userAddress = document.getElementById("text_id").value;
-
-      localStorage.setItem("text_plugin_yandex_map_item", userAddress);
-    }
+  document.getElementById('text_id').oninput = document.getElementById('text_id').onpaste = function ()
+  {
+    document.getElementById('text_id').style.border = '1px solid grey';
+    document.getElementById('label_error').style.display = 'none';
   }
 
   document.querySelector('input').addEventListener('keydown',function (e){
     if(e.key === 'Enter')
     {
-      window.Asc.plugin.sendToPlugin("onWindowReady");
+      userAddress = document.getElementById("text_id").value;
+
+      if(userAddress === '')
+      {
+        document.getElementById('text_id').style.borderColor = '#d9534f';
+        document.getElementById('label_error').style.display = 'block';
+        window.Asc.plugin.sendToPlugin("onWindowInputError");
+      }
+      else if(userAddress !== '')
+      {
+        localStorage.setItem("text_plugin_yandex_map_item", userAddress);
+        window.Asc.plugin.sendToPlugin("onWindowReady");
+      }
     }
   })
 
