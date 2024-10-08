@@ -3,8 +3,9 @@
 (function (window,undefined)
 {
     let mapWindow = null;
-    let displayMap = 'displayMap';
-    let displayInput = 'displayInput';
+    let displayMap = '';
+    let displayInput = '';
+    let displayInputError = '';
     let currentObjectId = undefined;
     let _url = '';
 
@@ -16,6 +17,19 @@
       localStorage.setItem('theme_yandex_map_plugin', '0');
     }
   };
+
+  if(Number(localStorage.getItem('theme_yandex_map_plugin')))
+  {
+    displayMap = 'displayMapDark';
+    displayInput = 'displayInputDark';
+    displayInputError ='displayInputErrorDark';
+  }
+  else if(!Number(localStorage.getItem('theme_yandex_map_plugin')))
+  {
+    displayMap = 'displayMapLight';
+    displayInput = 'displayInputLight';
+    displayInputError ='displayInputErrorLight';
+  }
 
   function addOleObj() {
 
@@ -66,10 +80,10 @@
 
     switch (obj) {
 
-      case 'displayMap': {
+      case 'displayMapDark': {
         variation
           = {
-          url: location.href.replace(file, 'mapSettings.html'),
+          url: location.href.replace(file, 'mapSettingsDark.html'),
           description: 'YandexMaps',
           descriptionLocale: {
             "ru": "ЯндексКарты",
@@ -121,6 +135,20 @@
         mapWindow = new window.Asc.PluginWindow();
         mapWindow.show(variation);
 
+        mapWindow.attachEvent('onWindowMapError',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayInputError);
+        })
+
+        mapWindow.attachEvent('onWindowMapReady',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayMap);
+        })
+
 
         window.Asc.plugin.button = function (id, windowId) {
           if(id === 0 ) {
@@ -137,11 +165,11 @@
         }
         break;
       }
-      case 'displayInput':
+      case 'displayInputDark':
       {
         variation
           = {
-          url: location.href.replace(file, 'inputSettings.html'),
+          url: location.href.replace(file, 'inputSettingsDark.html'),
           description: 'YandexMaps',
           descriptionLocale: {
             "ru": "ЯндексКарты",
@@ -178,11 +206,64 @@
         {
           mapWindow.close();
           mapWindow = null;
-          CreateWindow(displayInput);
+          CreateWindow(displayInputError);
         })
 
         window.Asc.plugin.button = function (id, windowId) {
         if (windowId) {
+            window.Asc.plugin.executeMethod('CloseWindow', [windowId], function () {
+              window.Asc.plugin.executeCommand("close", "");
+            })
+          }
+        }
+        break;
+      }
+      case 'displayInputErrorDark':
+      {
+        variation
+          = {
+          url: location.href.replace(file, 'inputErrorDark.html'),
+          description: 'YandexMaps',
+          descriptionLocale: {
+            "ru": "ЯндексКарты",
+            "fr": "YandexMaps",
+            "es": "YandexMaps",
+            "pt-BR": "YandexMaps",
+            "de": "YandexMaps",
+            "si": "YandexMaps"
+          },
+          isViewer: true,
+          isDisplayedInViewer: false,
+          EditorsSupport: ["word", "cell", "slide"],
+          isVisual: true,
+          isModal: true,
+          isInsideMode: false,
+          initDataType: "ole",
+          isUpdateOleOnResize: false,
+
+          size: [650, 90]
+        };
+
+
+        mapWindow = new window.Asc.PluginWindow();
+        mapWindow.show(variation);
+
+        mapWindow.attachEvent('onWindowReady',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayMap);
+        })
+
+        mapWindow.attachEvent('onWindowInputError',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayInputError);
+        })
+
+        window.Asc.plugin.button = function (id, windowId) {
+          if (windowId) {
             window.Asc.plugin.executeMethod('CloseWindow', [windowId], function () {
               window.Asc.plugin.executeCommand("close", "");
             })

@@ -11,6 +11,7 @@
     zoom:10,
     controls: ["zoomControl","typeSelector"]
   };
+  let userAddress = '';
 
   function setMapLayer(map, map_type){
     const MAP = 'custom#' + map_type;
@@ -41,7 +42,6 @@
     if (!mapPlayer) {
       function startMap() {
         mapPlayer = new ymaps.Map("map",mapSettings);
-        document.getElementById("text_id").disabled = false;
 
         if(Number(localStorage.getItem('theme_yandex_map_plugin'))) {
           setMapLayer(mapPlayer, 'dark');
@@ -49,8 +49,25 @@
 
         document.querySelector('input').addEventListener('keydown' ,function (e){
           if(e.key === 'Enter') {
-            const userAddress = document.getElementById("text_id").value;
-            localStorage.setItem("text_plugin_yandex_map_item", userAddress);
+
+            userAddress = document.getElementById("text_id").value;
+
+            if(userAddress === '')
+            {
+              window.Asc.plugin.sendToPlugin("onWindowMapError");
+            }
+            if(userAddress !== '')
+            {
+              localStorage.setItem("text_plugin_yandex_map_item", userAddress);
+              localStorage.searchFlag_yandex_map_item = 0;
+              window.Asc.plugin.sendToPlugin('onWindowMapReady');
+            }
+          }
+        });
+
+        if(localStorage.getItem('searchFlag_yandex_map_item') !== null) {
+          if (!Number(localStorage.getItem('searchFlag_yandex_map_item'))) {
+            userAddress = document.getElementById("text_id").value;
             let searchControl = new ymaps.control.SearchControl({
               options: {
                 provider: "yandex#search"
@@ -58,14 +75,8 @@
             });
             mapPlayer.controls.add(searchControl);
             searchControl.search(userAddress);
-            document.getElementById("text_id").disabled = true;
-          }
-        });
-
-        if(localStorage.getItem('autoEnter_yandex_map_item') !== null) {
-          if (!Number(localStorage.getItem('autoEnter_yandex_map_item'))) {
-            document.querySelector('input').dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter'}));
-            localStorage.autoEnter_yandex_map_item = 1;
+            setTimeout(function () {mapPlayer.controls.remove(searchControl)},300)
+            localStorage.searchFlag_yandex_map_item = 1;
           }
         }
 
@@ -85,14 +96,9 @@
   window.Asc.plugin.onTranslate = function ()
   {
     let lab = document.querySelector("label");
-    let inp = document.querySelector("input");
     if(lab)
     {
       lab.innerHTML = window.Asc.plugin.tr("Your address");
-    }
-    if(inp)
-    {
-      inp.placeholder = window.Asc.plugin.tr("Enter your address and press Enter");
     }
   }
 

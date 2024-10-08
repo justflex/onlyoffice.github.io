@@ -19,8 +19,6 @@
 
       if(userAddress === '')
       {
-        document.getElementById('text_id').style.borderColor = '#d9534f';
-        document.getElementById('label_error').style.display = 'block';
         window.Asc.plugin.sendToPlugin("onWindowInputError");
       }
       else if(userAddress !== '')
@@ -31,12 +29,13 @@
     }
   })
 
-  localStorage.setItem('autoEnter_yandex_map_item','0')
+  localStorage.setItem('searchFlag_yandex_map_item','0');
 
   window.Asc.plugin.onTranslate = function ()
   {
     let lab = document.querySelector("label");
     let inp = document.querySelector("input");
+    let lab_err = document.getElementById('label_error');
     if(lab)
     {
       lab.innerHTML = window.Asc.plugin.tr("Your address");
@@ -44,6 +43,10 @@
     if(inp)
     {
       inp.placeholder = window.Asc.plugin.tr("Enter your address and press Enter");
+    }
+    if(lab_err)
+    {
+      lab_err.innerHTML = window.Asc.plugin.tr("The field is empty");
     }
   }
 
