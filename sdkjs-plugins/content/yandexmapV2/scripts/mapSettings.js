@@ -75,7 +75,7 @@
             });
             mapPlayer.controls.add(searchControl);
             searchControl.search(userAddress);
-            setTimeout(function () {mapPlayer.controls.remove(searchControl)},300)
+            setTimeout(function () {mapPlayer.controls.remove(searchControl)},1000)
             localStorage.searchFlag_yandex_map_item = 1;
           }
         }
