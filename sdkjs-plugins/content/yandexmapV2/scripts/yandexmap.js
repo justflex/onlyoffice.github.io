@@ -18,19 +18,17 @@
     }
   };
 
-  if(Number(localStorage.getItem('theme_yandex_map_plugin')))
-  {
-    displayMap = 'displayMapDark';
-    displayInput = 'displayInputDark';
-    displayInputError ='displayInputErrorDark';
+  function CheckTheme() {
+    if (Number(localStorage.getItem('theme_yandex_map_plugin'))) {
+      displayMap = 'displayMapDark';
+      displayInput = 'displayInputDark';
+      displayInputError = 'displayInputErrorDark';
+    } else if (!Number(localStorage.getItem('theme_yandex_map_plugin'))) {
+      displayMap = 'displayMapLight';
+      displayInput = 'displayInputLight';
+      displayInputError = 'displayInputErrorLight';
+    }
   }
-  else if(!Number(localStorage.getItem('theme_yandex_map_plugin')))
-  {
-    displayMap = 'displayMapLight';
-    displayInput = 'displayInputLight';
-    displayInputError ='displayInputErrorLight';
-  }
-
   function addOleObj() {
 
     const ApiKey = "2fc0fb41-8290-4ed4-a5f4-4b0ea93a9710";
@@ -271,12 +269,257 @@
         }
         break;
       }
+      case 'displayMapLight': {
+        variation
+          = {
+          url: location.href.replace(file, 'mapSettingsLight.html'),
+          description: 'YandexMaps',
+          descriptionLocale: {
+            "ru": "ЯндексКарты",
+            "fr": "YandexMaps",
+            "es": "YandexMaps",
+            "pt-BR": "YandexMaps",
+            "de": "YandexMaps",
+            "si": "YandexMaps"
+          },
+          isViewer: true,
+          isDisplayedInViewer: false,
+          EditorsSupport: ["word", "cell", "slide"],
+          isVisual: true,
+          isModal: true,
+          isInsideMode: false,
+          initDataType: "ole",
+          isUpdateOleOnResize: false,
+
+          buttons: [
+            {
+              text: 'Insert',
+              primary: true,
+              isViewer: false,
+              textLocale: {
+                "ru": "Вставить",
+                "fr": "Insérer",
+                "es": "Insertar",
+                "de": "Einfügen",
+                "si": "ඇතුල් කරන්න"
+              }
+            },
+            {
+              text: 'Close',
+              primary: false,
+              isViewer: true,
+              textLocale: {
+                "ru": "Закрыть",
+                "fr": "Fermer",
+                "es": "Cerca",
+                "de": "Schließen",
+                "si": "වසන්න"
+              }
+            }
+          ],
+          size: [650, 550]
+        };
+
+
+        mapWindow = new window.Asc.PluginWindow();
+        mapWindow.show(variation);
+
+        mapWindow.attachEvent('onWindowMapError',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayInputError);
+        })
+
+        mapWindow.attachEvent('onWindowMapReady',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayMap);
+        })
+
+
+        window.Asc.plugin.button = function (id, windowId) {
+          if(id === 0 ) {
+            mapWindow.close();
+            mapWindow = null;
+            addOleObj();
+            currentObjectId = undefined;
+          }
+          else if (windowId) {
+            window.Asc.plugin.executeMethod('CloseWindow', [windowId], function () {
+              window.Asc.plugin.executeCommand("close", "");
+            })
+          }
+        }
+        break;
+      }
+      case 'displayInputLight':
+      {
+        variation
+          = {
+          url: location.href.replace(file, 'inputSettingsLight.html'),
+          description: 'YandexMaps',
+          descriptionLocale: {
+            "ru": "ЯндексКарты",
+            "fr": "YandexMaps",
+            "es": "YandexMaps",
+            "pt-BR": "YandexMaps",
+            "de": "YandexMaps",
+            "si": "YandexMaps"
+          },
+          isViewer: true,
+          isDisplayedInViewer: false,
+          EditorsSupport: ["word", "cell", "slide"],
+          isVisual: true,
+          isModal: true,
+          isInsideMode: false,
+          initDataType: "ole",
+          isUpdateOleOnResize: false,
+
+          size: [650, 90]
+        };
+
+
+        mapWindow = new window.Asc.PluginWindow();
+        mapWindow.show(variation);
+
+        mapWindow.attachEvent('onWindowReady',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayMap);
+        })
+
+        mapWindow.attachEvent('onWindowInputError',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayInputError);
+        })
+
+        window.Asc.plugin.button = function (id, windowId) {
+          if (windowId) {
+            window.Asc.plugin.executeMethod('CloseWindow', [windowId], function () {
+              window.Asc.plugin.executeCommand("close", "");
+            })
+          }
+        }
+        break;
+      }
+      case 'displayInputDark':
+      {
+        variation
+          = {
+          url: location.href.replace(file, 'inputSettingsDark.html'),
+          description: 'YandexMaps',
+          descriptionLocale: {
+            "ru": "ЯндексКарты",
+            "fr": "YandexMaps",
+            "es": "YandexMaps",
+            "pt-BR": "YandexMaps",
+            "de": "YandexMaps",
+            "si": "YandexMaps"
+          },
+          isViewer: true,
+          isDisplayedInViewer: false,
+          EditorsSupport: ["word", "cell", "slide"],
+          isVisual: true,
+          isModal: true,
+          isInsideMode: false,
+          initDataType: "ole",
+          isUpdateOleOnResize: false,
+
+          size: [650, 90]
+        };
+
+
+        mapWindow = new window.Asc.PluginWindow();
+        mapWindow.show(variation);
+
+        mapWindow.attachEvent('onWindowReady',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayMap);
+        })
+
+        mapWindow.attachEvent('onWindowInputError',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayInputError);
+        })
+
+        window.Asc.plugin.button = function (id, windowId) {
+          if (windowId) {
+            window.Asc.plugin.executeMethod('CloseWindow', [windowId], function () {
+              window.Asc.plugin.executeCommand("close", "");
+            })
+          }
+        }
+        break;
+      }
+      case 'displayInputErrorLight':
+      {
+        variation
+          = {
+          url: location.href.replace(file, 'inputErrorLight.html'),
+          description: 'YandexMaps',
+          descriptionLocale: {
+            "ru": "ЯндексКарты",
+            "fr": "YandexMaps",
+            "es": "YandexMaps",
+            "pt-BR": "YandexMaps",
+            "de": "YandexMaps",
+            "si": "YandexMaps"
+          },
+          isViewer: true,
+          isDisplayedInViewer: false,
+          EditorsSupport: ["word", "cell", "slide"],
+          isVisual: true,
+          isModal: true,
+          isInsideMode: false,
+          initDataType: "ole",
+          isUpdateOleOnResize: false,
+
+          size: [650, 90]
+        };
+
+
+        mapWindow = new window.Asc.PluginWindow();
+        mapWindow.show(variation);
+
+        mapWindow.attachEvent('onWindowReady',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayMap);
+        })
+
+        mapWindow.attachEvent('onWindowInputError',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayInputError);
+        })
+
+        window.Asc.plugin.button = function (id, windowId) {
+          if (windowId) {
+            window.Asc.plugin.executeMethod('CloseWindow', [windowId], function () {
+              window.Asc.plugin.executeCommand("close", "");
+            })
+          }
+        }
+        break;
+      }
     }
   }
 
 
     window.Asc.plugin.init = function (text) {
 
+      CheckTheme();
       let check = text;
       if (check !== "") {
           CreateWindow(displayMap);
