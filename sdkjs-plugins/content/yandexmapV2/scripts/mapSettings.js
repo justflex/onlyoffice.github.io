@@ -1,18 +1,19 @@
 'use strict';
 
-(function(window,undefined) {
+(function (window, undefined) {
 
   let mapPlayer = null;
   let mapZoom = null;
   let windowStatus = false;
   let mapCoords = null;
   let mapSettings = {
-    center:[55.74, 37.58],
-    zoom:10,
-    controls: ["zoomControl","typeSelector"]
+    center: [55.74, 37.58],
+    zoom: 10,
+    controls: ["zoomControl", "typeSelector"]
   };
+  let userAddress = '';
 
-  function setMapLayer(map, map_type){
+  function setMapLayer(map, map_type) {
     const MAP = 'custom#' + map_type;
     ymaps.layer.storage.add(MAP, function mapLayer() {
       return new ymaps.Layer('https://core-renderer-tiles.maps.yandex.net/tiles?l=map' + ((map_type == 'dark') ? ('&theme=dark') : ('')) + '&%c&%l');
@@ -21,7 +22,18 @@
     map.setType(MAP);
   }
 
-  window.Asc.plugin.init = function() {
+  if (Number(localStorage.getItem('theme_yandex_map_plugin')))
+  {
+    document.getElementById('text_id').style.backgroundColor = '#2a2a2a';
+    document.getElementById('text_id').style.color = 'whitesmoke';
+  }
+
+  document.getElementById('text_id').oninput = document.getElementById('text_id').onpaste = function () {
+    document.getElementById('text_id').style.border = '1px solid grey';
+    document.getElementById('label_error').style.display = 'none';
+  }
+
+  window.Asc.plugin.init = function () {
 
     document.getElementById("text_id").value = localStorage.getItem("text_plugin_yandex_map_item");
 
@@ -31,8 +43,7 @@
       windowStatus = true;
     }
 
-    if(localStorage.getItem('coords_plugin_yandex_map_item') !== null && localStorage.getItem('zoom_plugin_yandex_map_item') !== null )
-    {
+    if (localStorage.getItem('coords_plugin_yandex_map_item') !== null && localStorage.getItem('zoom_plugin_yandex_map_item') !== null) {
       mapSettings.center[0] = Number(localStorage.getItem("coords_plugin_yandex_map_item").split(",")[0])
       mapSettings.center[1] = Number(localStorage.getItem("coords_plugin_yandex_map_item").split(",")[1])
       mapSettings.zoom = Number(localStorage.getItem("zoom_plugin_yandex_map_item"))
@@ -40,29 +51,39 @@
 
     if (!mapPlayer) {
       function startMap() {
-        mapPlayer = new ymaps.Map("map",mapSettings);
+        mapPlayer = new ymaps.Map("map", mapSettings);
         document.getElementById("text_id").disabled = false;
 
-        if(Number(localStorage.getItem('theme_yandex_map_plugin'))) {
+        if (Number(localStorage.getItem('theme_yandex_map_plugin'))) {
           setMapLayer(mapPlayer, 'dark');
         }
 
-        document.querySelector('input').addEventListener('keydown' ,function (e){
-          if(e.key === 'Enter') {
-            const userAddress = document.getElementById("text_id").value;
-            localStorage.setItem("text_plugin_yandex_map_item", userAddress);
-            let searchControl = new ymaps.control.SearchControl({
-              options: {
-                provider: "yandex#search"
-              }
-            });
-            mapPlayer.controls.add(searchControl);
-            searchControl.search(userAddress);
-            document.getElementById("text_id").disabled = true;
+        document.querySelector('input').addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+
+            userAddress = document.getElementById("text_id").value;
+
+            if (userAddress === '') {
+              document.getElementById('label_error').style.display = 'block';
+              document.getElementById('text_id').style.border = '1px solid #d9534f';
+            }
+            if (userAddress !== '') {
+              localStorage.setItem("text_plugin_yandex_map_item", userAddress);
+              let searchControl = new ymaps.control.SearchControl({
+                options: {
+                  provider: "yandex#search"
+                }
+              });
+              mapPlayer.controls.add(searchControl);
+              searchControl.search(userAddress);
+              setTimeout(function () {
+                mapPlayer.controls.remove(searchControl)
+              }, 1000)
+            }
           }
         });
 
-        if(localStorage.getItem('autoEnter_yandex_map_item') !== null) {
+        if (localStorage.getItem('autoEnter_yandex_map_item') !== null) {
           if (!Number(localStorage.getItem('autoEnter_yandex_map_item'))) {
             document.querySelector('input').dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter'}));
             localStorage.autoEnter_yandex_map_item = 1;
@@ -78,22 +99,20 @@
         })
 
       }
+
       ymaps.ready(startMap);
     }
   }
 
-  window.Asc.plugin.onTranslate = function ()
-  {
+  window.Asc.plugin.onTranslate = function () {
     let lab = document.querySelector("label");
     let inp = document.querySelector("input");
-    if(lab)
-    {
+    if (lab) {
       lab.innerHTML = window.Asc.plugin.tr("Your address");
     }
-    if(inp)
-    {
+    if (inp) {
       inp.placeholder = window.Asc.plugin.tr("Enter your address and press Enter");
     }
   }
 
-})(window,undefined);
+})(window, undefined);
