@@ -1,3 +1,5 @@
 {
-  "Enter your address" : "Introduce tu dirección"
+  "Your address" : "Tu dirección",
+  "Enter your address and press Enter" : "Ingresa tu dirección y presiona Enter",
+  "The field is empty" : "El campo esta vacio"
 }

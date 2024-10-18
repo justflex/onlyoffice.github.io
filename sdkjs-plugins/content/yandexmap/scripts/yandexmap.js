@@ -1,184 +1,202 @@
+'use strict';
+
 (function (window,undefined)
 {
-    let mapPlayer = null
-    let mapZoom = null
-    let windowStatus = false
-    let mapCoords = null
-    let mapSettings = {
-      center:[55.74, 37.58],
-      zoom:10,
-      controls: ["zoomControl","typeSelector"]
+    let mapWindow = null;
+    let displayMap = 'displayMap';
+    let displayInput = 'displayInput';
+    let currentObjectId = undefined;
+    let _url = '';
+
+  window.Asc.plugin.onThemeChanged = function (theme) {
+
+    if(theme.type === "dark") {
+      localStorage.setItem('theme_yandex_map_plugin', '1');
+    } else {
+      localStorage.setItem('theme_yandex_map_plugin', '0');
     }
-    window.Asc.plugin.init = function (text) {
+  };
 
+  function addOleObj() {
 
-        document.getElementById("text_id").onchange = function () {
+    const ApiKey = "2fc0fb41-8290-4ed4-a5f4-4b0ea93a9710";
 
+    let mapCoords = localStorage.getItem("coords_plugin_yandex_map_item").split(",");
+    let mapZoom = localStorage.getItem("zoom_plugin_yandex_map_item");
 
-          if (!windowStatus) {
-            let newWindow = document.getElementById("id_player")
-            newWindow.innerHTML = "<div id=\"map\" style=\"position:absolute;padding:0;margin:0;left:0;top:0;width:100%;height:100%\"></div>"
-            windowStatus = true
-            window.Asc.plugin.resizeWindow(650, 550, 450, 450, 0, 0)
-          }
+    if(Number(localStorage.getItem('theme_yandex_map_plugin')))
+    {
+      _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] + "," + mapCoords[0] + "&z=" + mapZoom +'&theme=dark' +"&apikey=" + ApiKey;
+    }
+    else
+    {
+      _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] + "," + mapCoords[0] + "&z=" + mapZoom +"&apikey=" + ApiKey;
+    }
 
-          const userAddress = document.getElementById("text_id").value
+    if (ApiKey) {
+      let _info = window.Asc.plugin.info;
 
-          localStorage.setItem("text_key", userAddress)
+      currentObjectId = _info.objectId;
 
-          if (!mapPlayer) {
-            function startMap() {
-              mapPlayer = new ymaps.Map("map", mapSettings)
-              let searchControl = new ymaps.control.SearchControl({
-                options: {
-                  provider: "yandex#search"
-                }
-              })
-              mapPlayer.controls.add(searchControl)
-              searchControl.search(userAddress)
-              document.getElementById("text_id").disabled = true
+      let _method = (_info.objectId === undefined) ? "AddOleObject" : "EditOleObject";
 
+      let _param = {
+        guid: _info.guid,
+        widthPix: (_info.mmToPx * _info.width) >> 0,
+        heightPix: (_info.mmToPx * _info.height) >> 0,
+        width: _info.width ? _info.width : 100,
+        height: _info.height ? _info.height : 70,
+        imgSrc: _url,
+        data: localStorage.getItem("text_plugin_yandex_map_item"),
+        objectId: currentObjectId,
+        resize: true,
+        recalculate: true
+      };
 
-              window.Asc.plugin.button = function (id) {
+      window.Asc.plugin.executeMethod(_method, [_param]);
+    }
+  }
 
-                if (id === 0 && mapPlayer) {
+  function CreateWindow(obj) {
 
-                  if (true) {
+    let location = window.location;
+    let start = location.pathname.lastIndexOf('/') + 1;
+    let file = location.pathname.substring(start);
+    let variation = {};
 
-                    const ApiKey = "2fc0fb41-8290-4ed4-a5f4-4b0ea93a9710"
+    switch (obj) {
 
-                    mapCoords = mapPlayer.getCenter()
-                    mapZoom = mapPlayer.getZoom()
+      case 'displayMap': {
+        variation
+          = {
+          url: location.href.replace(file, 'mapSettings.html'),
+          description: 'YandexMaps',
+          descriptionLocale: {
+            "ru": "ЯндексКарты",
+            "fr": "YandexMaps",
+            "es": "YandexMaps",
+            "pt-BR": "YandexMaps",
+            "de": "YandexMaps",
+            "si": "YandexMaps"
+          },
+          isViewer: true,
+          isDisplayedInViewer: false,
+          EditorsSupport: ["word", "cell", "slide"],
+          isVisual: true,
+          isModal: true,
+          isInsideMode: false,
+          initDataType: "ole",
+          isUpdateOleOnResize: false,
 
-                    localStorage.setItem("key1", mapCoords)
-                    localStorage.setItem("key2", mapZoom)
-
-                    const _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] + "," + mapCoords[0] + "&z=" + mapZoom + "&apikey=" + ApiKey
-
-                    if (ApiKey) {
-                      let _info = window.Asc.plugin.info
-
-                      let _method = (_info.objectId === undefined) ? "AddOleObject" : "EditOleObject"
-
-                      let _param = {
-                        guid: _info.guid,
-                        widthPix: (_info.mmToPx * _info.width) >> 0,
-                        heightPix: (_info.mmToPx * _info.height) >> 0,
-                        width: _info.width ? _info.width : 100,
-                        height: _info.height ? _info.height : 70,
-                        imgSrc: _url,
-                        data: userAddress,
-                        objectId: _info.objectId,
-                        resize: _info.resize
-                      }
-
-                      window.Asc.plugin.executeMethod(_method, [_param], function () {
-                        window.Asc.plugin.executeCommand("close", "")
-                      })
-                    } else {
-                      this.executeCommand("close", "")
-                    }
-                  }
-                } else {
-                  this.executeCommand("close", "")
-                }
-              }
-            }
-
-            ymaps.ready(startMap)
-          }
-        }
-      let check = text
-      if(check !== "")
-      {
-        document.getElementById("text_id").value = localStorage.getItem("text_key")
-
-        if (!windowStatus) {
-          let newWindow = document.getElementById("id_player")
-          newWindow.innerHTML = "<div id=\"map\" style=\"position:absolute;padding:0;margin:0;left:0;top:0;width:100%;height:100%\"></div>"
-          windowStatus = true
-          window.Asc.plugin.resizeWindow(650, 550, 450, 450, 0, 0)
-        }
-
-        mapSettings.center[0] = Number(localStorage.getItem("key1").split(",")[0])
-        mapSettings.center[1] = Number(localStorage.getItem("key1").split(",")[1])
-        mapSettings.zoom = Number(localStorage.getItem("key2"))
-
-        if (!mapPlayer) {
-          function startMap() {
-            mapPlayer = new ymaps.Map("map",mapSettings)
-            document.getElementById("text_id").disabled = false
-
-            mapPlayer.events.add("click",function (e)
+          buttons: [
             {
-              const userAddress = document.getElementById("text_id").value
-              localStorage.setItem("text_key", userAddress)
-              let searchControl = new ymaps.control.SearchControl({
-                options: {
-                  provider: "yandex#search"
-                }
-              })
-              mapPlayer.controls.add(searchControl)
-              searchControl.search(userAddress)
-              document.getElementById("text_id").disabled = true
-            })
-
-            window.Asc.plugin.button = function (id) {
-
-              if (id === 0 && mapPlayer) {
-
-                if (true) {
-
-                  const ApiKey = "2fc0fb41-8290-4ed4-a5f4-4b0ea93a9710"
-
-                  mapCoords = mapPlayer.getCenter()
-                  mapZoom = mapPlayer.getZoom()
-
-                  localStorage.setItem("key1",mapCoords)
-                  localStorage.setItem("key2",mapZoom)
-
-                  const _url = "https://static-maps.yandex.ru/v1?ll=" + mapCoords[1] +","+mapCoords[0] +"&z=" +mapZoom+ "&apikey="+ ApiKey
-
-                  if(ApiKey) {
-                    let _info = window.Asc.plugin.info
-
-                    let _method = (_info.objectId === undefined)?"AddOleObject" : "EditOleObject"
-
-                    let _param = {
-                      guid : _info.guid,
-                      widthPix : (_info.mmToPx * _info.width) >> 0,
-                      heightPix : (_info.mmToPx * _info.height) >> 0,
-                      width : _info.width ? _info.width : 100,
-                      height : _info.height ? _info.height : 70,
-                      imgSrc : _url,
-                      data : check,
-                      objectId : _info.objectId,
-                      resize : _info.resize
-                    }
-                    window.Asc.plugin.executeMethod(_method, [_param], function() {
-                      window.Asc.plugin.executeCommand("close","")
-                    })
-                  }
-                  else { this.executeCommand("close", "")}
-                }
+              text: 'Insert',
+              primary: true,
+              isViewer: false,
+              textLocale: {
+                "ru": "Вставить",
+                "fr": "Insérer",
+                "es": "Insertar",
+                "de": "Einfügen",
+                "si": "ඇතුල් කරන්න"
               }
-              else { this.executeCommand("close", "")}
+            },
+            {
+              text: 'Close',
+              primary: false,
+              isViewer: true,
+              textLocale: {
+                "ru": "Закрыть",
+                "fr": "Fermer",
+                "es": "Cerca",
+                "de": "Schließen",
+                "si": "වසන්න"
+              }
             }
+          ],
+          size: [650, 550]
+        };
+
+
+        mapWindow = new window.Asc.PluginWindow();
+        mapWindow.show(variation);
+
+
+        window.Asc.plugin.button = function (id, windowId) {
+          if(id === 0 ) {
+            mapWindow.close();
+            mapWindow = null;
+            addOleObj();
+            currentObjectId = undefined;
           }
-          ymaps.ready(startMap)
+          else if (windowId) {
+            window.Asc.plugin.executeMethod('CloseWindow', [windowId], function () {
+              window.Asc.plugin.executeCommand("close", "");
+            })
+          }
         }
+        break;
+      }
+      case 'displayInput':
+      {
+        variation
+          = {
+          url: location.href.replace(file, 'inputSettings.html'),
+          description: 'YandexMaps',
+          descriptionLocale: {
+            "ru": "ЯндексКарты",
+            "fr": "YandexMaps",
+            "es": "YandexMaps",
+            "pt-BR": "YandexMaps",
+            "de": "YandexMaps",
+            "si": "YandexMaps"
+          },
+          isViewer: true,
+          isDisplayedInViewer: false,
+          EditorsSupport: ["word", "cell", "slide"],
+          isVisual: true,
+          isModal: true,
+          isInsideMode: false,
+          initDataType: "ole",
+          isUpdateOleOnResize: false,
+
+          size: [650, 90]
+        };
+
+
+        mapWindow = new window.Asc.PluginWindow();
+        mapWindow.show(variation);
+
+        mapWindow.attachEvent('onWindowReady',function ()
+        {
+          mapWindow.close();
+          mapWindow = null;
+          CreateWindow(displayMap);
+        })
+
+
+        window.Asc.plugin.button = function (id, windowId) {
+        if (windowId) {
+            window.Asc.plugin.executeMethod('CloseWindow', [windowId], function () {
+              window.Asc.plugin.executeCommand("close", "");
+            })
+          }
+        }
+        break;
       }
     }
-    window.Asc.plugin.button = function (id){
-        this.executeCommand('close','')
-    }
+  }
 
-    window.Asc.plugin.onTranslate = function ()
-    {
-      let lab = document.querySelector("label")
-      if(lab)
+
+    window.Asc.plugin.init = function (text) {
+
+      let check = text;
+      if (check !== "") {
+          CreateWindow(displayMap);
+      }
+      else
       {
-        lab.innerHTML = window.Asc.plugin.tr("Enter your address")
+        CreateWindow(displayInput);
       }
     }
 
